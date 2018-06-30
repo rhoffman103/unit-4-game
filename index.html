@@ -1,14 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-    
-    
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+        <title>Engram Collector</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    </head>
+    <body>
+        
+        <!-- HEADER -->
+        <div class="container">
+            <div class="jumbotron jumbotron-fluid mb-0">
+                <div class="container">
+                    <h1 class="display-4 text-center">Engram Collector</h1>
+                    <p class="lead text-center">A hidden numbers game</p>
+                </div>
+            </div>
 
-</body>
+        <!-- RULES DROPDOWN-->
+            <div class="card mt-4">
+                <h5 class="card-header" id="rules">Rules</h5>
+                <div class="card-body" id="rule-list">
+                    <p class="card-text">You are given a random target number at the start of the game.</p>
+                    <p class="card-text">Click the engrams to add to your score. Their values change each game.</p>
+                    <p class="card-text">Match the target number to win. Be careful not to go over the target number!</p>
+                </div>
+            </div>
+
+        <!-- TARGET SCORE PROGRESS -->
+            <div class="row mt-4">
+                <div class="col-md-4">
+                    <div class="card">
+                        <h5 class="card-header">Target Number</h5>
+                        <div class="card-body">
+                            <p class="card-text" id="target">0</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <h5 class="card-header">Score</h5>
+                        <div class="card-body">
+                            <p class="card-text" id="score">0</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <h5 class="card-header">Progress</h5>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col"><p class="card-text"><span class="font-weight-bold">wins: </span><span  id="wins">0</span></p></div>
+                                <div class="col"><p class="card-text"><span class="font-weight-bold">Losses: </span><span  id="losses">0</span></p></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        <!-- ENGRAM BUTTONS -->
+            <div class="row mt-4">
+                <div class="mx-auto">
+                    <img src="assets/images/rare-engram.png" id="rare" alt="Rare Engram">
+                    <img src="assets/images/legendary-engram.png" id="legendary" alt="legendary Engram">
+                    <img src="assets/images/prototype-engram.png" id="prototype" alt="prototype Engram">
+                    <img src="assets/images/exotic-engram.png" id="exotic" alt="exotic Engram">
+                    <img src="assets/images/uncommon-engram.png" id="uncommon" alt="uncommon Engram">
+                </div>
+            </div>
+
+        </div>
+
+        <script>
+            $(document).ready(function(){
+                $("#rules").on("click", function(){
+                    $("#rule-list").toggle();
+                });
+            });
+        </script>
+
+    </body>
 </html>
