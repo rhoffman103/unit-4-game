@@ -1,0 +1,37 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-image: url(../images/window-background.jpg);
+    background-position: 50% 50%;
+    background-attachment: fixed;
+    background-size: contain;
+    font-family: 'Arial Narrow Bold', sans-serif;
+}
+
+header {
+    background-image: url(../images/header-background.png);
+    background-position: 50% 45%;
+    color: white;
+}
+
+.transparent-background {
+    padding: 3.5rem;
+    position: relative;
+    background-color: rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+}
+
+h1 {
+    letter-spacing: 1.5rem;
+    font-weight: 900;
+}
+
+span.counter {
+    font-size: 1.3rem;
+}
+
+span {
+    font-size: 1.6rem;
+}
