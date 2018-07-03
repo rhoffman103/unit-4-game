@@ -22,7 +22,7 @@
 
         <!-- ENGRAM BUTTONS -->
             <div class="row mt-4">
-                <div class="mx-auto">
+                <div class="mx-auto engram">
                     <img src="assets/images/rare-engram.png" id="rare" alt="Rare Engram">
                     <img src="assets/images/legendary-engram.png" id="legendary" alt="legendary Engram">
                     <img src="assets/images/prototype-engram.png" id="prototype" alt="prototype Engram">
@@ -31,11 +31,19 @@
                 </div>
             </div>
 
-        <!-- TARGET SCORE PROGRESS -->
+        <!-- TARGET / SCORE / PROGRESS -->
             <div class="row mt-4">
                 <div class="col-md-4">
                     <div class="card">
-                        <h5 class="card-header bg-dark text-white">Target Number</h5>
+                        <h5 class="card-header text-white bar-bg">Target Number</h5>
+                        <div class="card-body">
+                            <p class="card-text"><span id="target">0</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <h5 class="card-header text-white bar-bg">Score</h5>
                         <div class="card-body">
                             <p class="card-text"><span id="score">0</span></p>
                         </div>
@@ -43,15 +51,7 @@
                 </div>
                 <div class="col-md-4">
                     <div class="card">
-                        <h5 class="card-header bg-dark text-white">Score</h5>
-                        <div class="card-body">
-                            <p class="card-text"><span id="score">0</span></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card">
-                        <h5 class="card-header bg-dark text-white">Progress</h5>
+                        <h5 class="card-header text-white bar-bg" id="prog_btn" >Progress</h5>
                         <div class="card-body">
                             <div class="row">
                                 <div class="col"><p class="card-text"><span class="font-weight-bold counter">Wins: </span><span  id="wins">0</span></p></div>
@@ -64,7 +64,7 @@
 
         <!-- RULES DROPDOWN-->
             <div class="card mt-4 mb-4">
-                <h5 class="card-header bg-dark text-white" id="rules">Rules</h5>
+                <h5 class="card-header text-white bar-bg" id="rules">Rules</h5>
                 <div class="card-body" id="rule-list">
                     <p class="card-text">You are given a random target number at the start of the game.</p>
                     <p class="card-text">Click the engrams to add to your score. Their values change each game.</p>
@@ -74,16 +74,20 @@
         
         </div>
 
-        <script>
-            $(document).ready(function(){
+        <!-- MODAL -->
+        <div class="modal" id="win-modal">
+            <!-- MODAL CONTENT -->
+            <div class="modal-content">
+                <div class="modal-header bar-bg">
+                    <span class="close">&times;</span>
+                </div>
+                <div class="modal-body text-center">
+                    <h2>Well Done Guardian!</h2>
+                </div>
+            </div>
+        </div>
 
-                $("#rule-list").hide();
-
-                $("#rules").on("click", function(){
-                    $("#rule-list").toggle();
-                });
-            });
-        </script>
+        <script type="text/javascript" src="assets/javascript/game.js"></script>
 
     </body>
 </html>
