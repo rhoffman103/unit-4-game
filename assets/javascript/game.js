@@ -12,45 +12,27 @@ var player = {
 
 //Engram Object
 var engram = {
-    engramArray: [],
-    // uncommon: 0,
-    // rare: 0,
-    // legendary: 0,
-    // exotic: 0,
-    // silver:0,
-
     engramValues: [{
-        value: 0
-    },
-    { 
-        value: 0
-    },
-    { 
-        value: 0
-    },
-    {
-        value: 0
-    },
-    {
-        value: 0
+        image: "./assets/images/rare-engram.png",
+        value: 0,
+    },{
+        image: "./assets/images/legendary-engram.png",
+        value: 0,
+    },{
+        image: "./assets/images/prototype-engram.png",
+        value: 0,
+    },{
+        image: "./assets/images/exotic-engram.png",
+        value: 0,
+    },{
+        image: "./assets/images/uncommon-engram.png",
+        value: 0,
     }],
 
     setEngramValues: function () {
         for (var i=0; i < this.engramValues.length; i++) {
             this.engramValues[i].value = Math.ceil(Math.random() * 12);
         }
-    },
-
-    setEngramNums: function () {
-        for (var i = 0; i < 5; i++) {
-            this.engramArray.push(Math.floor(Math.random() * 12 + 1));
-        } 
-        console.log(this.engramArray);
-        // this.uncommon = this.engramArray[0];
-        // this.rare = this.engramArray[1];
-        // this.legendary = this.engramArray[2];
-        // this.exotic = this.engramArray[3];
-        // this.silver = this.engramArray[4];
     },
 }
 
@@ -63,10 +45,9 @@ var computer = {
 }
 
 // START GAME
-computer.setTargetNum();
-engram.setEngramNums();
+// computer.setTargetNum();
+engram.setEngramValues();
 console.log(engram);
-console.log(computer.targetNum);
 
 // MODAL
 // When the user clicks the button, open the modal 
@@ -88,6 +69,11 @@ window.onclick = function(event) {
 
 $(document).ready(function(){
 
+    // ADD IMAGE-BUTTONS TO DIV
+    for (var i=0; i < engram.engramValues.length; i++) {
+        $('.engram').append($('<img>',{value: engram.engramValues[i].value , src: engram.engramValues[i].image}))
+    }
+    
     // DISPLAY TARGET VALUE
     $("#target").html(computer.targetNum);
 
@@ -97,10 +83,9 @@ $(document).ready(function(){
     });
 
     // ADD ENGRAMS TO SCORE
-    $(".engram").on("click", function() {
-        score += $(this).val();
-        console.log("score = " + score);
-        $("#score").html(score);
+    $("img").on("click", function() {
+        player.score += parseInt($(this).attr("value"));
+        $("#score").html(player.score);
     });
 
 });
