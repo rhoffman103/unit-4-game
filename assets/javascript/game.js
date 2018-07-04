@@ -5,7 +5,7 @@ var span  = document.getElementsByClassName("close")[0];
 
 // Player Object
 var player = {
-    score:  0,
+    score:  1,
     wins:   0,
     losses: 0
 }
@@ -42,19 +42,28 @@ var computer = {
     setTargetNum: function () {
         this.targetNum  = (Math.floor(Math.random() * 120) + 19);
     },
+    resetGame: function () {
+        player.score = 0;
+        this.setTargetNum();
+        engram.setEngramValues();
+        updateDOM();
+        console.log(engram);
+    },
+    checkGameOver: function () {
+        if (player.score === this.targetNum) {
+            player.wins++;
+            modal.style.display = "block";
+            this.resetGame();
+        } 
+        else if (player.score > this.targetNum) {
+            player.losses++;
+            modal.style.display = "block";
+            this.resetGame();
+        }
+    }
 }
-
-// START GAME
-// computer.setTargetNum();
-engram.setEngramValues();
-console.log(engram);
 
 // MODAL
-// When the user clicks the button, open the modal 
-btn.onclick = function() {
-    modal.style.display = "block";
-}
-
 // When the user clicks on <span> (x), close the modal
 span.onclick = function() {
     modal.style.display = "none";
@@ -67,15 +76,28 @@ window.onclick = function(event) {
     }
 }
 
+const updateDOM = function() {
+    document.getElementById("score").innerHTML = player.score;
+    document.getElementById("wins").innerHTML = player.wins;
+    document.getElementById("losses").innerHTML = player.losses;
+    document.getElementById("target").innerHTML = computer.targetNum;
+}
+
+computer.resetGame();
+
 $(document).ready(function(){
+    
+    // const updateDOMjquery = function() {
+    //     $("#score").html(player.score);
+    //     $("#wins").html(player.wins);
+    //     $("#losses").html(player.losses);
+    //     $("#target").html(computer.targetNum);
+    // }
 
     // ADD IMAGE-BUTTONS TO DIV
     for (var i=0; i < engram.engramValues.length; i++) {
-        $('.engram').append($('<img>',{value: engram.engramValues[i].value , src: engram.engramValues[i].image}))
+        $('.engram').append($('<img>',{value: engram.engramValues[i].value, class: "engram-btn", src: engram.engramValues[i].image}))
     }
-    
-    // DISPLAY TARGET VALUE
-    $("#target").html(computer.targetNum);
 
     // TOGGLE RULES LIST
     $("#rules").on("click", function(){
@@ -83,9 +105,10 @@ $(document).ready(function(){
     });
 
     // ADD ENGRAMS TO SCORE
-    $("img").on("click", function() {
+    $(".engram-btn").on("click", function() {
         player.score += parseInt($(this).attr("value"));
         $("#score").html(player.score);
+        computer.checkGameOver();
     });
 
 });
