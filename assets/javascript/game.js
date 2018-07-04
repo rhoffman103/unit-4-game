@@ -1,6 +1,6 @@
 
-var modal = document.getElementById('win-modal');
-var btn   = document.getElementById("prog_btn");
+var modalwin = document.getElementById('win-modal');
+var modalloss = document.getElementById('lose-modal');
 var span  = document.getElementsByClassName("close")[0];
 
 // Player Object
@@ -52,12 +52,12 @@ var computer = {
     checkGameOver: function () {
         if (player.score === this.targetNum) {
             player.wins++;
-            modal.style.display = "block";
+            modalwin.style.display = "block";
             this.resetGame();
         } 
         else if (player.score > this.targetNum) {
             player.losses++;
-            modal.style.display = "block";
+            modalloss.style.display = "block";
             this.resetGame();
         }
     }
@@ -65,14 +65,17 @@ var computer = {
 
 // MODAL
 // When the user clicks on <span> (x), close the modal
+// FIXME
 span.onclick = function() {
-    modal.style.display = "none";
+    modalwin.style.display = "none";
+    modalloss.style.display = "none";
 }
 
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
+    if ((event.target == modalwin) || (event.target == modalloss)) {
+        modalwin.style.display = "none";
+        modalloss.style.display = "none";
     }
 }
 
@@ -96,7 +99,7 @@ $(document).ready(function(){
 
     // ADD IMAGE-BUTTONS TO DIV
     for (var i=0; i < engram.engramValues.length; i++) {
-        $('.engram').append($('<img>',{value: engram.engramValues[i].value, class: "engram-btn", src: engram.engramValues[i].image}))
+        $('.engram').append($('<img>',{value: engram.engramValues[i].value, class: "engram-btn", src: engram.engramValues[i].image}));
     }
 
     // TOGGLE RULES LIST
