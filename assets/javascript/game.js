@@ -1,9 +1,6 @@
 
 var modalwin = document.getElementById('win-modal');
 var modalloss = document.getElementById('lose-modal');
-var span  = document.getElementsByClassName("close")[0];
-var winbtn = document.getElementById("win-btn");
-var lossbtn = document.getElementById("loss-btn");
 
 // Player Object
 var player = {
@@ -48,18 +45,18 @@ var computer = {
         player.score = 0;
         this.setTargetNum();
         engram.setEngramValues();
-        updateDOM();
+        $updateDOM();
         console.log(engram);
     },
     checkGameOver: function () {
         if (player.score === this.targetNum) {
             player.wins++;
-            modalwin.style.display = "block";
+            $("#win-modal").show();
             this.resetGame();
         } 
         else if (player.score > this.targetNum) {
             player.losses++;
-            modalloss.style.display = "block";
+            $("#lose-modal").show();
             this.resetGame();
         }
     }
@@ -73,28 +70,24 @@ window.onclick = function(event) {
     }
 }
 
-const updateDOM = function() {
-    document.getElementById("score").innerHTML = player.score;
-    document.getElementById("wins").innerHTML = player.wins;
-    document.getElementById("losses").innerHTML = player.losses;
-    document.getElementById("target").innerHTML = computer.targetNum;
-}
-
-computer.resetGame();
-
-$(document).ready(function(){
-    
-    // const updateDOMjquery = function() {
-    //     $("#score").html(player.score);
-    //     $("#wins").html(player.wins);
-    //     $("#losses").html(player.losses);
-    //     $("#target").html(computer.targetNum);
-    // }
-
-    // ADD IMAGE-BUTTONS TO DIV
+// ADD IMAGE-BUTTONS TO DIV
+const $asignEngrams = function() {
     for (var i=0; i < engram.engramValues.length; i++) {
         $('.engram').append($('<img>',{value: engram.engramValues[i].value, class: "engram-btn", src: engram.engramValues[i].image}));
     }
+};
+
+const $updateDOM = function() {
+    $("#score").html(player.score);
+    $("#wins").html(player.wins);
+    $("#losses").html(player.losses);
+    $("#target").html(computer.targetNum);
+}
+
+computer.resetGame();
+$asignEngrams();
+
+$(document).ready(function(){
 
     // TOGGLE RULES LIST
     $("#rules").on("click", function(){
@@ -121,6 +114,7 @@ $(document).ready(function(){
     });
 
     // **FIXME**
+
     // $(".container").on("click", function() {
     //     if (modalAvtive) {
     //         $(".modal").hide();
