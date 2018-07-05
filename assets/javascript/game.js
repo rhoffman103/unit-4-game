@@ -2,6 +2,8 @@
 var modalwin = document.getElementById('win-modal');
 var modalloss = document.getElementById('lose-modal');
 var span  = document.getElementsByClassName("close")[0];
+var winbtn = document.getElementById("win-btn");
+var lossbtn = document.getElementById("loss-btn");
 
 // Player Object
 var player = {
@@ -63,14 +65,6 @@ var computer = {
     }
 }
 
-// MODAL
-// When the user clicks on <span> (x), close the modal
-// FIXME
-span.onclick = function() {
-    modalwin.style.display = "none";
-    modalloss.style.display = "none";
-}
-
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
     if ((event.target == modalwin) || (event.target == modalloss)) {
@@ -113,5 +107,25 @@ $(document).ready(function(){
         $("#score").html(player.score);
         computer.checkGameOver();
     });
+
+    // OPEN MODAL
+    $("#win-btn").on("click", function() {
+        $("#win-modal").show();
+        modalActive = true;
+    })
+
+    // Close modal
+    $(".close").on("click", function() {
+        $(".modal").hide();
+        modalActive = false;
+    });
+
+    // **FIXME**
+    // $(".container").on("click", function() {
+    //     if (modalAvtive) {
+    //         $(".modal").hide();
+    //         modalActive = flase;
+    //     }
+    // });
 
 });

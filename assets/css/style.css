@@ -44,6 +44,15 @@ span {
     display: none;
 }
 
+#rules:hover{
+    color: goldenrod;
+    cursor: pointer;
+}
+
+.engram-btn:hover {
+    cursor: pointer;
+}
+
 /* MODAL */
 /* The Modal (background) */
 .modal {
@@ -95,7 +104,7 @@ span {
 
 .close:hover,
 .close:focus {
-    color: #000;
+    color: goldenrod;
     text-decoration: none;
     cursor: pointer;
 }
