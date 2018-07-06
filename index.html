@@ -26,12 +26,12 @@
             </div>
 
         <!-- TARGET / SCORE / PROGRESS -->
-            <div class="row">
-                <div class="col-md-4 col-6 mt-4">
+            <div class="row" id="game-row">
+                <div class="col-md-4 col-6 mt-4" id="game-div">
                     <div class="card">
-                        <h5 class="card-header text-white bar-bg">Target</h5>
+                        <h5 class="card-header text-white bar-bg" id="game-info">Target</h5>
                         <div class="card-body flex-row">
-                            <p class="card-text"><span id="target"></span></p>
+                            <p class="card-text tracker"><span id="target"></span></p>
                         </div>
                     </div>
                 </div>
@@ -69,25 +69,14 @@
         </div>
 
         <!-- MODAL -->
-            <div class="modal" id="win-modal">
+            <div class="modal" id="modal">
                 <!-- MODAL CONTENT -->
                 <div class="modal-content">
                     <div class="modal-header bar-bg">
                         <span class="close">&times;</span>
                     </div>
                     <div class="modal-body text-center">
-                        <h2>Well Done Guardian!</h2>
-                    </div>
-                </div>
-            </div>
-            <div class="modal" id="lose-modal">
-                <!-- MODAL CONTENT -->
-                <div class="modal-content">
-                    <div class="modal-header bar-bg">
-                        <span class="close">&times;</span>
-                    </div>
-                    <div class="modal-body text-center">
-                        <h2>Your light fades away.</h2>
+                        <h2 id="modal-message"></h2>
                     </div>
                 </div>
             </div>

@@ -1,6 +1,6 @@
 
-var modalwin = document.getElementById('win-modal');
-var modalloss = document.getElementById('lose-modal');
+var modal = document.getElementById('modal');
+var modalActive = false;
 
 // Player Object
 var player = {
@@ -51,22 +51,21 @@ var computer = {
     checkGameOver: function () {
         if (player.score === this.targetNum) {
             player.wins++;
-            $("#win-modal").show();
+            $openModal("Well done guardian!!!");
             this.resetGame();
         } 
         else if (player.score > this.targetNum) {
             player.losses++;
-            $("#lose-modal").show();
+            $openModal("Your light fades away...");
             this.resetGame();
         }
     }
 }
 
-// When the user clicks anywhere outside of the modal, close it
+// Click anywhere outside the modal to close it
 window.onclick = function(event) {
-    if ((event.target == modalwin) || (event.target == modalloss)) {
-        modalwin.style.display = "none";
-        modalloss.style.display = "none";
+    if (event.target == modal) {
+        modal.style.display = "none";
     }
 }
 
@@ -77,6 +76,19 @@ const $asignEngrams = function() {
     }
 };
 
+// INSERT GAME DIVS
+const $insertGameInfo = function(heading, numberID) {
+    $("#game-info").html(heading);
+    $(".tracker").append($("<span>",{id: numberID}));
+    $("#game-row").append("#game-div");
+}
+
+// INSERT MESSAGE FOR MODAL
+const $openModal = function(message) {
+    $("#modal-message").html(message);
+    $(".modal").show();
+}
+
 const $updateDOM = function() {
     $("#score").html(player.score);
     $("#wins").html(player.wins);
@@ -84,6 +96,8 @@ const $updateDOM = function() {
     $("#target").html(computer.targetNum);
 }
 
+// $insertGameInfo("Target", "target");
+// $insertGameInfo("Score", "score");
 computer.resetGame();
 $asignEngrams();
 
@@ -103,7 +117,7 @@ $(document).ready(function(){
 
     // OPEN MODAL
     $("#win-btn").on("click", function() {
-        $("#win-modal").show();
+        $openModal("nonsense poopy pants!");
         modalActive = true;
     })
 
