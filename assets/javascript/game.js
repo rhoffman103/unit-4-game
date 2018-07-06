@@ -31,7 +31,7 @@ var engram = {
     setEngramValues: function () {
         for (var i=0; i < this.engramValues.length; i++) {
             this.engramValues[i].value = Math.ceil(Math.random() * 12);
-        }
+        } console.log(this.engramValues);
     },
 }
 
@@ -45,8 +45,8 @@ var computer = {
         player.score = 0;
         this.setTargetNum();
         engram.setEngramValues();
+        $resetEngramValues();
         $updateDOM();
-        console.log(engram);
     },
     checkGameOver: function () {
         if (player.score === this.targetNum) {
@@ -67,13 +67,22 @@ window.onclick = function(event) {
     if (event.target == modal) {
         modal.style.display = "none";
     }
-}
+};
 
 // ADD IMAGE-BUTTONS TO DIV
 const $asignEngrams = function() {
     for (var i=0; i < engram.engramValues.length; i++) {
-        $('.engram').append($('<img>',{value: engram.engramValues[i].value, class: "engram-btn", src: engram.engramValues[i].image}));
+        $('.engram').append($('<img>',{value: engram.engramValues[i].value, class: "engram-btn", id: ("engram-" + (i + 1)), src: engram.engramValues[i].image}));
     }
+};
+
+// RESET ENGRAM VALUES
+const $resetEngramValues = function() {
+    for (var i=0; i < engram.engramValues.length; i++) {
+        $("#engram-" + (i + 1)).attr({value: engram.engramValues[i].value});
+    }
+    console.log("reset");
+    console.log(engram.engramValues);
 };
 
 // INSERT GAME DIVS
