@@ -1,6 +1,5 @@
 
 var modal = document.getElementById('modal');
-var modalActive = false;
 
 // Player Object
 var player = {
@@ -31,7 +30,7 @@ var engram = {
     setEngramValues: function () {
         for (var i=0; i < this.engramValues.length; i++) {
             this.engramValues[i].value = Math.ceil(Math.random() * 12);
-        } console.log(this.engramValues);
+        }
     },
 }
 
@@ -81,8 +80,6 @@ const $resetEngramValues = function() {
     for (var i=0; i < engram.engramValues.length; i++) {
         $("#engram-" + (i + 1)).attr({value: engram.engramValues[i].value});
     }
-    console.log("reset");
-    console.log(engram.engramValues);
 };
 
 // INSERT GAME DIVS
@@ -114,7 +111,7 @@ $(document).ready(function(){
 
     // TOGGLE RULES LIST
     $("#rules").on("click", function(){
-        $("#rule-list").toggle();
+        $("#rule-list").toggle("medium");
     });
 
     // ADD ENGRAMS TO SCORE
@@ -127,22 +124,19 @@ $(document).ready(function(){
     // OPEN MODAL
     $("#win-btn").on("click", function() {
         $openModal("nonsense poopy pants!");
-        modalActive = true;
     })
 
     // Close modal
     $(".close").on("click", function() {
         $(".modal").hide();
-        modalActive = false;
     });
 
-    // **FIXME**
+    // **FIXME** click outside modal message box to close
 
-    // $(".container").on("click", function() {
-    //     if (modalAvtive) {
+    // $(".modal").on("click", function() {
     //         $(".modal").hide();
-    //         modalActive = flase;
-    //     }
+    //         modalActive = false;
+    //         console.log(modalActive);
     // });
 
 });
