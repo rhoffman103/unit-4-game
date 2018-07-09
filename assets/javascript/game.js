@@ -27,9 +27,17 @@ var engram = {
         value: 0,
     }],
 
+    numbers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+
     setEngramValues: function () {
+        var j = 0;
+        this.numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+
         for (var i=0; i < this.engramValues.length; i++) {
-            this.engramValues[i].value = Math.ceil(Math.random() * 12);
+            j = Math.ceil(Math.random() * (12 - i));
+            this.engramValues[i].value = this.numbers[j];
+            this.numbers.splice(j, 1);
+            console.log(engram.numbers);
         }
     },
 }
