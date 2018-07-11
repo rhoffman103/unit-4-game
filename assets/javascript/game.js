@@ -70,11 +70,11 @@ $(document).ready(function(){
     }
 
     // Click anywhere outside the modal to close it
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    };
+    // window.onclick = function(event) {
+    //     if (event.target == modal) {
+    //         modal.style.display = "none";
+    //     }
+    // };
 
     // ADD IMAGE-BUTTONS TO DIV
     const $asignEngrams = function() {
@@ -132,17 +132,20 @@ $(document).ready(function(){
         $openModal("nonsense poopy pants!");
     })
 
-    // Close modal with x
-    $(".close").on("click", function() {
-        $(".modal").hide();
-    });
+    // Close modal with x. (no longer need with new close event)
+    // $(".close").on("click", function() {
+    //     $(".modal").hide();
+    // });
 
     // Click only outside modal message box to close
     $(".modal").on("click", function(event) {
         var target = $(event.target);
-        if (target === $(".modal-content")) {    
-            $(".modal").hide();
-            modalActive = false;
+        
+        if ((!target.is("div.modal-header.bar-bg"))
+            && (!target.is("div.modal-body"))
+            && (!target.is("h2#modal-message"))) {    
+                $(".modal").hide();
+                modalActive = false;
         }
     });
 
