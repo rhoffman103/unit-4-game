@@ -37,7 +37,6 @@ $(document).ready(function(){
                 j = Math.ceil(Math.random() * (12 - i));
                 this.engramValues[i].value = this.numbers[j];
                 this.numbers.splice(j, 1);
-                console.log(engram.numbers);
             }
         },
     }
@@ -122,7 +121,7 @@ $(document).ready(function(){
 
     // ADD ENGRAMS TO SCORE
     $(".engram-btn").on("click", function() {
-        player.score += parseInt($(this).attr("value"));
+        player.score += parseInt($(this).attr("value")) || 0;
         $("#score").html(player.score);
         computer.checkGameOver();
     });
@@ -141,7 +140,7 @@ $(document).ready(function(){
     $(".modal").on("click", function(event) {
         var target = $(event.target);
         
-        if ((!target.is("div.modal-header.bar-bg"))
+        if ((!target.is("div.modal-header"))
             && (!target.is("div.modal-body"))
             && (!target.is("h2#modal-message"))) {    
                 $(".modal").hide();
