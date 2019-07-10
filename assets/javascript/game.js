@@ -77,9 +77,20 @@ $(document).ready(function(){
 
     // ADD IMAGE-BUTTONS TO DIV
     const $asignEngrams = function() {
-        for (var i=0; i < engram.engramValues.length; i++) {
-            $('.engram').append($('<img>',{value: engram.engramValues[i].value, class: "engram-btn", id: ("engram-" + (i + 1)), src: engram.engramValues[i].image}));
+        const animateIt = {
+            animation: ['bounceInRight', 'bounceInUp', 'bounceIn', 'bounceInDown', 'bounceInLeft'],
+            delay: ['delay-0', 'delay-400', 'delay-800', 'delay-600', 'delay-200']
         }
+
+        engram.engramValues.forEach(function(eng, i) {
+            $('.engram').append($('<img>',{value: eng.value, class: `animated ${animateIt.animation[i]} ${animateIt.delay[i]} engram-btn engram-${i}`, id: ("engram-" + (i + 1)), src: eng.image}));
+        })
+
+        setTimeout(function() {
+            engram.engramValues.forEach(function(eng, i) {
+                $(`.engram-${i}`).removeClass(`animated ${animateIt.animation[i]} ${animateIt.delay[i]}`)
+            });
+        }, 1800)
     };
 
     // RESET ENGRAM VALUES
