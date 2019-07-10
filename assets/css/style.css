@@ -51,12 +51,12 @@ span {
 }
 
 .engram-btn:hover {
-    cursor: pointer !important;
-    -moz-transform: scale(-1, 1) !important;
-    -webkit-transform: scale(-1, 1) !important;
-    -o-transform: scale(-1, 1) !important;
-    -ms-transform: scale(-1, 1) !important;
-    transform: scale(-1, 1) !important;
+    cursor: pointer;
+    -moz-transform: scale(-1, 1);
+    -webkit-transform: scale(-1, 1);
+    -o-transform: scale(-1, 1);
+    -ms-transform: scale(-1, 1);
+    transform: scale(-1, 1);
 }
 
 .engram-btn {
@@ -147,6 +147,12 @@ span {
 
 .modal-body {
     padding: 2px 16px;
+}
+
+@media only screen and (min-width: 1000px) {
+    body {
+        overflow: hidden;
+    }
 }
 
 @media only screen and (max-width: 568px) {

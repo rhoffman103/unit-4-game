@@ -120,10 +120,17 @@ $(document).ready(function(){
         $("#target").html(computer.targetNum);
     }
 
+    const $openRulesAfterAnimations = function() {
+        setTimeout(function() {
+            $("#rule-list").toggle("medium");
+        }, 1200);
+    };
+
     // $insertGameInfo("Target", "target");
     // $insertGameInfo("Score", "score");
     computer.resetGame();
     $asignEngrams();
+    $openRulesAfterAnimations();
 
     // TOGGLE RULES LIST
     $("#rules").on("click", function(){
