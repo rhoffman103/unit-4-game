@@ -29,15 +29,30 @@ $(document).ready(function(){
 
         numbers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
 
-        setEngramValues: function () {
-            var j = 0;
-            this.numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+        shuffle: function(arr) {
+        
+            let mutatedArray = arr.map(element => element);
+            let arrayLength = mutatedArray.length;
+            let temporaryValue, randomIndex;
 
-            for (var i=0; i < this.engramValues.length; i++) {
-                j = Math.ceil(Math.random() * (12 - i));
-                this.engramValues[i].value = this.numbers[j];
-                this.numbers.splice(j, 1);
-            }
+            arr.forEach((elem, index) => {
+                let maxIndex = (arrayLength - 1) - index;
+                randomIndex = Math.floor(Math.random() * maxIndex);
+
+                temporaryValue = mutatedArray[maxIndex];
+                mutatedArray[maxIndex] = mutatedArray[randomIndex];
+                mutatedArray[randomIndex] = temporaryValue;
+            })
+        
+            return mutatedArray;
+        },
+
+        setEngramValues: function () {
+            let mutatedNumbers = this.shuffle(this.numbers);
+
+            this.engramValues.forEach(function(eng, i) {
+                eng.value = mutatedNumbers.shift();
+            });
         },
     }
 
