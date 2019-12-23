@@ -35,10 +35,6 @@ class Engrams {
         });
     };
 
-    clickHandler(element: HTMLElement) {
-        console.log(element.getAttribute('value'));
-    };
-
     private renderEngrams() {
         let engramsDiv = document.getElementById('engrams')! as HTMLDivElement;
         let engramsFragment = document.createDocumentFragment();
@@ -49,7 +45,7 @@ class Engrams {
             img.setAttribute('alt', 'engram');
             img.setAttribute('value', engram.value.toString());
             img.addEventListener('click',(event) => {
-                this.clickHandler(event.currentTarget! as HTMLElement);
+                scoreboard.scoreClickHandler(event.currentTarget! as HTMLImageElement);
             });
             engramsFragment.appendChild(img);
         });
@@ -69,6 +65,28 @@ class Scoreboard {
         this.updateDomScoreboard();
     };
 
+    readyNewGame() {
+        this.target = this.getRandomTarget();
+        this.score = 0;
+        this.updateDomScoreboard();
+    };
+
+    scoreClickHandler(engramElement: HTMLImageElement) {
+        const engramValue = engramElement.getAttribute('value') || 0;
+        this.score += +engramValue;
+        
+        if (this.score === this.target) {
+            this.wins += 1;
+            this.readyNewGame();
+        }
+        else if (this.score > this.target) {
+            this.losses +=1;
+            this.readyNewGame();
+        }
+        
+        this.updateDomScoreboard();
+    };
+
     private getRandomTarget(): number {
         let max = 100;
         let min = 20;
@@ -81,7 +99,7 @@ class Scoreboard {
         document.getElementById('wins')!.innerHTML = this.wins.toString();
         document.getElementById('losses')!.innerHTML = this.losses.toString();
     };
-}
+};
 
-new Scoreboard();
+const scoreboard = new Scoreboard();
 new Engrams();

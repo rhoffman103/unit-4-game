@@ -29,12 +29,7 @@ var Engrams = /** @class */ (function () {
         });
     };
     ;
-    Engrams.prototype.clickHandler = function (element) {
-        console.log(element.getAttribute('value'));
-    };
-    ;
     Engrams.prototype.renderEngrams = function () {
-        var _this = this;
         var engramsDiv = document.getElementById('engrams');
         var engramsFragment = document.createDocumentFragment();
         this.engrams.forEach(function (engram) {
@@ -44,7 +39,7 @@ var Engrams = /** @class */ (function () {
             img.setAttribute('alt', 'engram');
             img.setAttribute('value', engram.value.toString());
             img.addEventListener('click', function (event) {
-                _this.clickHandler(event.currentTarget);
+                scoreboard.scoreClickHandler(event.currentTarget);
             });
             engramsFragment.appendChild(img);
         });
@@ -65,6 +60,26 @@ var Scoreboard = /** @class */ (function () {
         this.updateDomScoreboard();
     }
     ;
+    Scoreboard.prototype.readyNewGame = function () {
+        this.target = this.getRandomTarget();
+        this.score = 0;
+        this.updateDomScoreboard();
+    };
+    ;
+    Scoreboard.prototype.scoreClickHandler = function (engramElement) {
+        var engramValue = engramElement.getAttribute('value') || 0;
+        this.score += +engramValue;
+        if (this.score === this.target) {
+            this.wins += 1;
+            this.readyNewGame();
+        }
+        else if (this.score > this.target) {
+            this.losses += 1;
+            this.readyNewGame();
+        }
+        this.updateDomScoreboard();
+    };
+    ;
     Scoreboard.prototype.getRandomTarget = function () {
         var max = 100;
         var min = 20;
@@ -80,6 +95,7 @@ var Scoreboard = /** @class */ (function () {
     ;
     return Scoreboard;
 }());
-new Scoreboard();
+;
+var scoreboard = new Scoreboard();
 new Engrams();
 //# sourceMappingURL=app.js.map
