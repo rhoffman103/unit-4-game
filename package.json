@@ -1,0 +1,22 @@
+{
+  "name": "unit-4-game",
+  "version": "1.0.0",
+  "description": "1.  clone the repo\r 2.  open index.html",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rhoffman103/unit-4-game.git"
+  },
+  "author": "Bobby Hoffman",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rhoffman103/unit-4-game/issues"
+  },
+  "homepage": "https://github.com/rhoffman103/unit-4-game#readme",
+  "devDependencies": {
+    "typescript": "^3.7.4"
+  }
+}
