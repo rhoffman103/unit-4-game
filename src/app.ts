@@ -58,4 +58,30 @@ class Engrams {
     };
 };
 
+class Scoreboard {
+    score = 0;
+    wins = 0;
+    losses = 0;
+    target = 0;
+
+    constructor() {
+        this.target = this.getRandomTarget();
+        this.updateDomScoreboard();
+    };
+
+    private getRandomTarget(): number {
+        let max = 100;
+        let min = 20;
+        return Math.ceil(Math.random() * (max - min)) + min;
+    };
+
+    private updateDomScoreboard() {
+        document.getElementById('target')!.innerHTML = this.target.toString();
+        document.getElementById('score')!.innerHTML = this.score.toString();
+        document.getElementById('wins')!.innerHTML = this.wins.toString();
+        document.getElementById('losses')!.innerHTML = this.losses.toString();
+    };
+}
+
+new Scoreboard();
 new Engrams();

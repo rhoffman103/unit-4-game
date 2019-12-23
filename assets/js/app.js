@@ -55,5 +55,31 @@ var Engrams = /** @class */ (function () {
     return Engrams;
 }());
 ;
+var Scoreboard = /** @class */ (function () {
+    function Scoreboard() {
+        this.score = 0;
+        this.wins = 0;
+        this.losses = 0;
+        this.target = 0;
+        this.target = this.getRandomTarget();
+        this.updateDomScoreboard();
+    }
+    ;
+    Scoreboard.prototype.getRandomTarget = function () {
+        var max = 100;
+        var min = 20;
+        return Math.ceil(Math.random() * (max - min)) + min;
+    };
+    ;
+    Scoreboard.prototype.updateDomScoreboard = function () {
+        document.getElementById('target').innerHTML = this.target.toString();
+        document.getElementById('score').innerHTML = this.score.toString();
+        document.getElementById('wins').innerHTML = this.wins.toString();
+        document.getElementById('losses').innerHTML = this.losses.toString();
+    };
+    ;
+    return Scoreboard;
+}());
+new Scoreboard();
 new Engrams();
 //# sourceMappingURL=app.js.map
