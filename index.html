@@ -10,12 +10,53 @@
         <link href="assets/css/style.css" rel="stylesheet" type="text/css">
     </head>
     <body>
+        <template id="row-template">
+            <div class="row"></div>
+        </template>
+
         <template id="engram-template">
             <img class="engram-btn clickable-engram" src="" alt="engram">
         </template>
 
         <template id="engrams-container-template">
             <div class="mx-auto engram" id="engrams-list"></div>
+        </template>
+
+        <template id="scoreboard-template">
+            <div class="col-md-4 col-6 mt-4">
+                <div class="card score-cards">
+                    <h5 class="card-header text-white bar-bg scoreboard-title"></h5>
+                    <div class="card-body align-items-stretch">
+                        <p class="card-text tracker">
+                            <span class="scoreboard-value"></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </template>
+      
+        <template id="progress-template">
+            <div class="col-md-4 mt-4">
+                <div class="card score-cards">
+                    <h5 class="card-header text-white bar-bg scoreboard-title"></h5>
+                    <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <p class="card-text" id="wins-container">
+                                <span class="font-weight-bold counter">Wins: </span>
+                                <span class="wins-value"></span>
+                            </p>
+                        </div>
+                        <div class="col">
+                            <p class="card-text" id="losses-container">
+                                <span class="font-weight-bold counter">Losses: </span>
+                                <span class="losses-value"></span>
+                            </p>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
         </template>
         
         <!-- HEADER -->
@@ -31,40 +72,12 @@
             <div class="row mt-4 engram-row" id="engrams-container"></div>
             
             <!-- TARGET / SCORE / PROGRESS -->
-            <div class="row" id="game-row">
-                <div class="col-md-4 col-6 mt-4" id="game-div">
-                    <div class="card score-cards">
-                        <h5 class="card-header text-white bar-bg" id="game-info">Target</h5>
-                        <div class="card-body align-items-stretch">
-                            <p class="card-text tracker"><span id="target"></span></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 col-6 mt-4">
-                    <div class="card score-cards">
-                        <h5 class="card-header text-white bar-bg">Score</h5>
-                        <div class="card-body align-items-stretch">
-                            <p class="card-text"><span id="score"></span></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 mt-4">
-                    <div class="card score-cards">
-                        <h5 class="card-header text-white bar-bg">Progress</h5>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col"><p class="card-text"><span class="font-weight-bold counter" id="win-btn">Wins: </span><span  id="wins"></span></p></div>
-                                <div class="col"><p class="card-text"><span class="font-weight-bold counter" id="loss-btn">Losses: </span><span  id="losses"></span></p></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <div id="game-row"></div>
             
             <!-- RULES DROPDOWN-->
             <div class="card mt-4 mb-4">
                 <h5 class="card-header text-white bar-bg" id="rules">Rules</h5>
-                <div class="card-body" id="rule-list">
+                <div class="card-body toggle-content hidden" id="rule-list">
                     <p class="card-text">You are given a random target number at the start of the game.</p>
                     <p class="card-text">Click the engrams to add to your score. Their values change each game.</p>
                     <p class="card-text">Match the target number to win. Be careful not to go over the target number!</p>
@@ -88,6 +101,7 @@
         
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <!-- <script type="text/javascript" src="assets/javascript/game.js"></script> -->
+        <script src="assets/js/animations.js"></script>
         <script src="assets/js/templateClass.js"></script>
         <script src="assets/js/app.js"></script>
     </body>

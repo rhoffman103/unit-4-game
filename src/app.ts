@@ -45,7 +45,7 @@ class Engram extends TemplateComponent<HTMLDivElement, HTMLImageElement> {
         });
     };
 
-    render() {};
+    render() { };
 };
 
 class EngramList extends TemplateComponent<HTMLDivElement, HTMLDivElement> {
@@ -95,29 +95,90 @@ class EngramList extends TemplateComponent<HTMLDivElement, HTMLDivElement> {
     render() {
         const listFragment = document.createDocumentFragment();
         this.engrams.forEach(engram => {
-          listFragment.appendChild(engram.element);
+            listFragment.appendChild(engram.element);
         });
         document.getElementById('engrams-list')!.appendChild(listFragment);
     };
 };
 
-class Scoreboard {
+class ScoreboardElement extends TemplateComponent<HTMLDivElement, HTMLDivElement> {
+    public scoreboardValue = 0;
+
+    constructor(
+        templateId: string,
+        private scoreboardTitle: string
+    ) {
+        super(templateId, 'game-row', 'child');
+        this.configureElement();
+    };
+
+    configureElement() {
+        this.element.getElementsByClassName('scoreboard-title')[0].innerHTML = this.scoreboardTitle.toString();
+        this.element.getElementsByClassName('scoreboard-value')[0].innerHTML = this.scoreboardValue.toString();
+    };
+
+    public changeValue(value: number) {
+        this.scoreboardValue = value;
+        this.element.getElementsByClassName('scoreboard-value')[0].innerHTML = value.toString();
+    };
+
+    render() { };
+};
+
+class ScoreboardProgress extends TemplateComponent<HTMLDivElement, HTMLDivElement> {
+    constructor(
+        templateId: string,
+        private scoreboardTitle: string
+    ) {
+        super(templateId, 'game-row', 'child');
+        this.configureElement();
+    };
+
+    configureElement() {
+        this.element.getElementsByClassName('scoreboard-title')[0].innerHTML = this.scoreboardTitle.toString();
+    };
+
+    public changeValues(wins: number, losses: number) {
+        this.element.getElementsByClassName('wins-value')[0].innerHTML = wins.toString();
+        this.element.getElementsByClassName('losses-value')[0].innerHTML = losses.toString();
+    };
+
+    render() { };
+};
+
+class Scoreboard extends TemplateComponent<HTMLDivElement, HTMLDivElement> {
+    private targetChild = new ScoreboardElement('scoreboard-template', 'Target');
+    private scoreChild = new ScoreboardElement('scoreboard-template', 'Score');
+    private progressChild = new ScoreboardProgress('progress-template', 'Progress');
     score = 0;
     wins = 0;
     losses = 0;
     target = 0;
 
     constructor() {
+        super('row-template', 'game-row', 'parent');
         let _this = this;
         _this.target = _this.getRandomTarget();
-        _this.updateDomScoreboard();
+        _this.configure();
+    };
+
+    update() {
+        let _this = this;
+        _this.targetChild.changeValue(_this.target);
+        _this.scoreChild.changeValue(_this.score);
+        _this.progressChild.changeValues(_this.wins, _this.losses);
     };
 
     readyNewGame() {
         let _this = this;
         _this.target = _this.getRandomTarget();
         _this.score = 0;
-        _this.updateDomScoreboard();
+        _this.update();
+    };
+
+    configure() {
+        this.readyNewGame();
+        this.render();
     };
 
     scoreClickHandler(engramValue: number, callback?: Function) {
@@ -136,7 +197,7 @@ class Scoreboard {
             _this.readyNewGame();
         }
 
-        _this.updateDomScoreboard();
+        _this.update();
         if (callback) {
             callback(<ScoreboardClickObj>{
                 score: _this.score,
@@ -154,12 +215,13 @@ class Scoreboard {
         return Math.ceil(Math.random() * (max - min)) + min;
     };
 
-    private updateDomScoreboard() {
+    render() {
         let _this = this;
-        document.getElementById('target')!.innerHTML = _this.target.toString();
-        document.getElementById('score')!.innerHTML = _this.score.toString();
-        document.getElementById('wins')!.innerHTML = _this.wins.toString();
-        document.getElementById('losses')!.innerHTML = _this.losses.toString();
+        const fragment = document.createDocumentFragment();
+        fragment.appendChild(_this.targetChild.element);
+        fragment.appendChild(_this.scoreChild.element);
+        fragment.appendChild(_this.progressChild.element);
+        _this.element.appendChild(fragment);
     };
 };
 

@@ -112,22 +112,88 @@ var EngramList = /** @class */ (function (_super) {
     return EngramList;
 }(TemplateComponent));
 ;
-var Scoreboard = /** @class */ (function () {
-    function Scoreboard() {
-        this.score = 0;
-        this.wins = 0;
-        this.losses = 0;
-        this.target = 0;
-        var _this = this;
-        _this.target = _this.getRandomTarget();
-        _this.updateDomScoreboard();
+var ScoreboardElement = /** @class */ (function (_super) {
+    __extends(ScoreboardElement, _super);
+    function ScoreboardElement(templateId, scoreboardTitle) {
+        var _this_1 = _super.call(this, templateId, 'game-row', 'child') || this;
+        _this_1.scoreboardTitle = scoreboardTitle;
+        _this_1.scoreboardValue = 0;
+        _this_1.configureElement();
+        return _this_1;
     }
+    ;
+    ScoreboardElement.prototype.configureElement = function () {
+        this.element.getElementsByClassName('scoreboard-title')[0].innerHTML = this.scoreboardTitle.toString();
+        this.element.getElementsByClassName('scoreboard-value')[0].innerHTML = this.scoreboardValue.toString();
+    };
+    ;
+    ScoreboardElement.prototype.changeValue = function (value) {
+        this.scoreboardValue = value;
+        this.element.getElementsByClassName('scoreboard-value')[0].innerHTML = value.toString();
+    };
+    ;
+    ScoreboardElement.prototype.render = function () { };
+    ;
+    return ScoreboardElement;
+}(TemplateComponent));
+;
+var ScoreboardProgress = /** @class */ (function (_super) {
+    __extends(ScoreboardProgress, _super);
+    function ScoreboardProgress(templateId, scoreboardTitle) {
+        var _this_1 = _super.call(this, templateId, 'game-row', 'child') || this;
+        _this_1.scoreboardTitle = scoreboardTitle;
+        _this_1.configureElement();
+        return _this_1;
+    }
+    ;
+    ScoreboardProgress.prototype.configureElement = function () {
+        this.element.getElementsByClassName('scoreboard-title')[0].innerHTML = this.scoreboardTitle.toString();
+    };
+    ;
+    ScoreboardProgress.prototype.changeValues = function (wins, losses) {
+        this.element.getElementsByClassName('wins-value')[0].innerHTML = wins.toString();
+        this.element.getElementsByClassName('losses-value')[0].innerHTML = losses.toString();
+    };
+    ;
+    ScoreboardProgress.prototype.render = function () { };
+    ;
+    return ScoreboardProgress;
+}(TemplateComponent));
+;
+var Scoreboard = /** @class */ (function (_super) {
+    __extends(Scoreboard, _super);
+    function Scoreboard() {
+        var _this_1 = _super.call(this, 'row-template', 'game-row', 'parent') || this;
+        _this_1.targetChild = new ScoreboardElement('scoreboard-template', 'Target');
+        _this_1.scoreChild = new ScoreboardElement('scoreboard-template', 'Score');
+        _this_1.progressChild = new ScoreboardProgress('progress-template', 'Progress');
+        _this_1.score = 0;
+        _this_1.wins = 0;
+        _this_1.losses = 0;
+        _this_1.target = 0;
+        var _this = _this_1;
+        _this.target = _this.getRandomTarget();
+        _this.configure();
+        return _this_1;
+    }
+    ;
+    Scoreboard.prototype.update = function () {
+        var _this = this;
+        _this.targetChild.changeValue(_this.target);
+        _this.scoreChild.changeValue(_this.score);
+        _this.progressChild.changeValues(_this.wins, _this.losses);
+    };
     ;
     Scoreboard.prototype.readyNewGame = function () {
         var _this = this;
         _this.target = _this.getRandomTarget();
         _this.score = 0;
-        _this.updateDomScoreboard();
+        _this.update();
+    };
+    ;
+    Scoreboard.prototype.configure = function () {
+        this.readyNewGame();
+        this.render();
     };
     ;
     Scoreboard.prototype.scoreClickHandler = function (engramValue, callback) {
@@ -144,7 +210,7 @@ var Scoreboard = /** @class */ (function () {
             isNewGame = true;
             _this.readyNewGame();
         }
-        _this.updateDomScoreboard();
+        _this.update();
         if (callback) {
             callback({
                 score: _this.score,
@@ -162,16 +228,17 @@ var Scoreboard = /** @class */ (function () {
         return Math.ceil(Math.random() * (max - min)) + min;
     };
     ;
-    Scoreboard.prototype.updateDomScoreboard = function () {
+    Scoreboard.prototype.render = function () {
         var _this = this;
-        document.getElementById('target').innerHTML = _this.target.toString();
-        document.getElementById('score').innerHTML = _this.score.toString();
-        document.getElementById('wins').innerHTML = _this.wins.toString();
-        document.getElementById('losses').innerHTML = _this.losses.toString();
+        var fragment = document.createDocumentFragment();
+        fragment.appendChild(_this.targetChild.element);
+        fragment.appendChild(_this.scoreChild.element);
+        fragment.appendChild(_this.progressChild.element);
+        _this.element.appendChild(fragment);
     };
     ;
     return Scoreboard;
-}());
+}(TemplateComponent));
 ;
 var scoreboard = new Scoreboard();
 new EngramList(engramImages);
