@@ -19,10 +19,7 @@ interface ScoreboardClickObj {
     isNewGame: boolean;
 };
 
-class Engram {
-    templateElement: HTMLTemplateElement;
-    element: HTMLImageElement;
-
+class Engram extends TemplateComponent<HTMLDivElement, HTMLImageElement> {
     get value() {
         return this._value;
     };
@@ -32,10 +29,7 @@ class Engram {
         private _value: number,
         private clickHandler: Function
     ) {
-        this.templateElement = document.getElementById('engram-template')! as HTMLTemplateElement;
-        const importedNode = document.importNode(this.templateElement.content, true);
-        this.element = importedNode.firstElementChild as HTMLImageElement;
-
+        super('engram-template', 'engrams-list', 'child');
         this.configureElement();
     };
 
@@ -50,14 +44,17 @@ class Engram {
             _this.clickHandler(+_this._value);
         });
     };
+
+    render() {};
 };
 
-class EngramList {
+class EngramList extends TemplateComponent<HTMLDivElement, HTMLDivElement> {
     engrams: Engram[] = [];
 
     constructor(private images: string[]) {
+        super('engrams-container-template', 'engrams-container', 'parent');
         this.configure();
-        this.renderEngrams();
+        this.render();
     };
 
     randomizeEngramValues(maxValue: number) {
@@ -85,21 +82,22 @@ class EngramList {
         });
     };
 
+    configure() {
+        let _this = this;
+        _this.engrams = _this.images.map((img) => new Engram(img, 0, _this.handleClickLogic));
+        _this.randomizeEngramValues(12);
+    };
+
     private update() {
         this.randomizeEngramValues(12);
     };
 
-    private configure() {
-        this.engrams = this.images.map((img) => new Engram(img, 0, this.handleClickLogic));
-        this.randomizeEngramValues(12);
-    };
-
-    renderEngrams() {
+    render() {
         const listFragment = document.createDocumentFragment();
         this.engrams.forEach(engram => {
           listFragment.appendChild(engram.element);
         });
-        document.getElementById('engrams')!.appendChild(listFragment);
+        document.getElementById('engrams-list')!.appendChild(listFragment);
     };
 };
 
@@ -110,38 +108,41 @@ class Scoreboard {
     target = 0;
 
     constructor() {
-        this.target = this.getRandomTarget();
-        this.updateDomScoreboard();
+        let _this = this;
+        _this.target = _this.getRandomTarget();
+        _this.updateDomScoreboard();
     };
 
     readyNewGame() {
-        this.target = this.getRandomTarget();
-        this.score = 0;
-        this.updateDomScoreboard();
+        let _this = this;
+        _this.target = _this.getRandomTarget();
+        _this.score = 0;
+        _this.updateDomScoreboard();
     };
 
     scoreClickHandler(engramValue: number, callback?: Function) {
-        this.score += +engramValue;
+        let _this = this;
+        _this.score += +engramValue;
         let isNewGame = false;
 
-        if (this.score === this.target) {
-            this.wins += 1;
+        if (_this.score === _this.target) {
+            _this.wins += 1;
             isNewGame = true;
-            this.readyNewGame();
+            _this.readyNewGame();
         }
-        else if (this.score > this.target) {
-            this.losses += 1;
+        else if (_this.score > _this.target) {
+            _this.losses += 1;
             isNewGame = true;
-            this.readyNewGame();
+            _this.readyNewGame();
         }
 
-        this.updateDomScoreboard();
+        _this.updateDomScoreboard();
         if (callback) {
             callback(<ScoreboardClickObj>{
-                score: this.score,
-                target: this.target,
-                wins: this.wins,
-                losses: this.losses,
+                score: _this.score,
+                target: _this.target,
+                wins: _this.wins,
+                losses: _this.losses,
                 isNewGame
             });
         }
@@ -154,10 +155,11 @@ class Scoreboard {
     };
 
     private updateDomScoreboard() {
-        document.getElementById('target')!.innerHTML = this.target.toString();
-        document.getElementById('score')!.innerHTML = this.score.toString();
-        document.getElementById('wins')!.innerHTML = this.wins.toString();
-        document.getElementById('losses')!.innerHTML = this.losses.toString();
+        let _this = this;
+        document.getElementById('target')!.innerHTML = _this.target.toString();
+        document.getElementById('score')!.innerHTML = _this.score.toString();
+        document.getElementById('wins')!.innerHTML = _this.wins.toString();
+        document.getElementById('losses')!.innerHTML = _this.losses.toString();
     };
 };
 
