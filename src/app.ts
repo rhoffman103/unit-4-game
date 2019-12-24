@@ -6,7 +6,7 @@ const engramImages = [
     'uncommon-engram.png'
 ];
 
-interface Engram {
+interface EngramInterface {
     imageName: string;
     value: number;
 };
@@ -17,17 +17,50 @@ interface ScoreboardClickObj {
     wins: number;
     losses: number;
     isNewGame: boolean;
-}
+};
 
-class Engrams {
+class Engram {
+    templateElement: HTMLTemplateElement;
+    element: HTMLImageElement;
+
+    get value() {
+        return this._value;
+    };
+
+    constructor(
+        private image: string,
+        private _value: number,
+        private clickHandler: Function
+    ) {
+        this.templateElement = document.getElementById('engram-template')! as HTMLTemplateElement;
+        const importedNode = document.importNode(this.templateElement.content, true);
+        this.element = importedNode.firstElementChild as HTMLImageElement;
+
+        this.configureElement();
+    };
+
+    public setValue(val: number) {
+        this._value = val;
+    };
+
+    configureElement() {
+        let _this = this;
+        _this.element.src = `./assets/images/${_this.image}`;
+        _this.element.addEventListener('click', () => {
+            _this.clickHandler(+_this._value);
+        });
+    };
+};
+
+class EngramList {
     engrams: Engram[] = [];
 
-    constructor() {
-        this.randomizeEngramValues(engramImages, 12);
+    constructor(private images: string[]) {
+        this.configure();
         this.renderEngrams();
     };
 
-    randomizeEngramValues(imgs: string[], maxValue: number) {
+    randomizeEngramValues(maxValue: number) {
         let i = 1;
         let remainingNums: number[] = [];
 
@@ -36,42 +69,37 @@ class Engrams {
             i++;
         };
 
-        this.engrams = imgs.map((img) => {
+        this.engrams.forEach((engram) => {
             const randNum = Math.floor(Math.random() * remainingNums.length);
-            const newValue = remainingNums.splice(randNum, 1)[0];
-            return <Engram> { imageName: img, value: newValue };
+            engram.setValue(remainingNums.splice(randNum, 1)[0]);
         });
     };
 
-    handleClickLogic(currentTarget: EventTarget) {
-        scoreboard.scoreClickHandler(
-            currentTarget! as HTMLImageElement,
-            (scoreboardObj: ScoreboardClickObj) => {
-                if (scoreboardObj.isNewGame) {
-                    console.log(scoreboardObj)
-                    this.randomizeEngramValues(engramImages, 12);
-                    this.renderEngrams();
-                }
+    handleClickLogic = (clickValue: number) => {
+        let _this = this;
+        scoreboard.scoreClickHandler(clickValue, (scoreboardObj: ScoreboardClickObj) => {
+            if (scoreboardObj.isNewGame) {
+                _this.randomizeEngramValues(12);
+                _this.update();
             }
-        );
+        });
     };
 
-    private renderEngrams() {
-        let engramsDiv = document.getElementById('engrams')! as HTMLDivElement;
-        let engramsFragment = document.createDocumentFragment();
+    private update() {
+        this.randomizeEngramValues(12);
+    };
+
+    private configure() {
+        this.engrams = this.images.map((img) => new Engram(img, 0, this.handleClickLogic));
+        this.randomizeEngramValues(12);
+    };
+
+    renderEngrams() {
+        const listFragment = document.createDocumentFragment();
         this.engrams.forEach(engram => {
-            let img = document.createElement('img');
-            img.setAttribute('class', 'clickable-engram engram-btn');
-            img.setAttribute('src', "./assets/images/" + engram.imageName);
-            img.setAttribute('alt', 'engram');
-            img.setAttribute('value', engram.value.toString());
-            img.addEventListener('click',(event) => {
-                this.handleClickLogic(event.currentTarget!);
-            });
-            engramsFragment.appendChild(img);
+          listFragment.appendChild(engram.element);
         });
-        engramsDiv.innerHTML = '';
-        engramsDiv.appendChild(engramsFragment);
+        document.getElementById('engrams')!.appendChild(listFragment);
     };
 };
 
@@ -92,30 +120,31 @@ class Scoreboard {
         this.updateDomScoreboard();
     };
 
-    scoreClickHandler(engramElement: HTMLImageElement, callback: Function) {
-        const engramValue = engramElement.getAttribute('value') || 0;
+    scoreClickHandler(engramValue: number, callback?: Function) {
         this.score += +engramValue;
         let isNewGame = false;
-        
+
         if (this.score === this.target) {
             this.wins += 1;
             isNewGame = true;
             this.readyNewGame();
         }
         else if (this.score > this.target) {
-            this.losses +=1;
+            this.losses += 1;
             isNewGame = true;
             this.readyNewGame();
         }
-        
+
         this.updateDomScoreboard();
-        callback(<ScoreboardClickObj>{
-            score: this.score,
-            target: this.target,
-            wins: this.wins,
-            losses: this.losses,
-            isNewGame
-        });
+        if (callback) {
+            callback(<ScoreboardClickObj>{
+                score: this.score,
+                target: this.target,
+                wins: this.wins,
+                losses: this.losses,
+                isNewGame
+            });
+        }
     };
 
     private getRandomTarget(): number {
@@ -133,4 +162,4 @@ class Scoreboard {
 };
 
 const scoreboard = new Scoreboard();
-new Engrams();
+new EngramList(engramImages);
