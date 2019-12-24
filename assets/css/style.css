@@ -40,7 +40,7 @@ span {
     background-color: rgb(49, 32, 61);
 }
 
-#rule-list, .modal {
+.modal {
     display: none;
 }
 
