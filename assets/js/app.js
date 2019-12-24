@@ -29,7 +29,19 @@ var Engrams = /** @class */ (function () {
         });
     };
     ;
+    Engrams.prototype.handleClickLogic = function (currentTarget) {
+        var _this = this;
+        scoreboard.scoreClickHandler(currentTarget, function (scoreboardObj) {
+            if (scoreboardObj.isNewGame) {
+                console.log(scoreboardObj);
+                _this.randomizeEngramValues(engramImages, 12);
+                _this.renderEngrams();
+            }
+        });
+    };
+    ;
     Engrams.prototype.renderEngrams = function () {
+        var _this = this;
         var engramsDiv = document.getElementById('engrams');
         var engramsFragment = document.createDocumentFragment();
         this.engrams.forEach(function (engram) {
@@ -39,7 +51,7 @@ var Engrams = /** @class */ (function () {
             img.setAttribute('alt', 'engram');
             img.setAttribute('value', engram.value.toString());
             img.addEventListener('click', function (event) {
-                scoreboard.scoreClickHandler(event.currentTarget);
+                _this.handleClickLogic(event.currentTarget);
             });
             engramsFragment.appendChild(img);
         });
@@ -66,18 +78,28 @@ var Scoreboard = /** @class */ (function () {
         this.updateDomScoreboard();
     };
     ;
-    Scoreboard.prototype.scoreClickHandler = function (engramElement) {
+    Scoreboard.prototype.scoreClickHandler = function (engramElement, callback) {
         var engramValue = engramElement.getAttribute('value') || 0;
         this.score += +engramValue;
+        var isNewGame = false;
         if (this.score === this.target) {
             this.wins += 1;
+            isNewGame = true;
             this.readyNewGame();
         }
         else if (this.score > this.target) {
             this.losses += 1;
+            isNewGame = true;
             this.readyNewGame();
         }
         this.updateDomScoreboard();
+        callback({
+            score: this.score,
+            target: this.target,
+            wins: this.wins,
+            losses: this.losses,
+            isNewGame: isNewGame
+        });
     };
     ;
     Scoreboard.prototype.getRandomTarget = function () {

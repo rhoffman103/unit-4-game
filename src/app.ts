@@ -11,6 +11,14 @@ interface Engram {
     value: number;
 };
 
+interface ScoreboardClickObj {
+    score: number;
+    target: number;
+    wins: number;
+    losses: number;
+    isNewGame: boolean;
+}
+
 class Engrams {
     engrams: Engram[] = [];
 
@@ -35,6 +43,19 @@ class Engrams {
         });
     };
 
+    handleClickLogic(currentTarget: EventTarget) {
+        scoreboard.scoreClickHandler(
+            currentTarget! as HTMLImageElement,
+            (scoreboardObj: ScoreboardClickObj) => {
+                if (scoreboardObj.isNewGame) {
+                    console.log(scoreboardObj)
+                    this.randomizeEngramValues(engramImages, 12);
+                    this.renderEngrams();
+                }
+            }
+        );
+    };
+
     private renderEngrams() {
         let engramsDiv = document.getElementById('engrams')! as HTMLDivElement;
         let engramsFragment = document.createDocumentFragment();
@@ -45,7 +66,7 @@ class Engrams {
             img.setAttribute('alt', 'engram');
             img.setAttribute('value', engram.value.toString());
             img.addEventListener('click',(event) => {
-                scoreboard.scoreClickHandler(event.currentTarget! as HTMLImageElement);
+                this.handleClickLogic(event.currentTarget!);
             });
             engramsFragment.appendChild(img);
         });
@@ -71,20 +92,30 @@ class Scoreboard {
         this.updateDomScoreboard();
     };
 
-    scoreClickHandler(engramElement: HTMLImageElement) {
+    scoreClickHandler(engramElement: HTMLImageElement, callback: Function) {
         const engramValue = engramElement.getAttribute('value') || 0;
         this.score += +engramValue;
+        let isNewGame = false;
         
         if (this.score === this.target) {
             this.wins += 1;
+            isNewGame = true;
             this.readyNewGame();
         }
         else if (this.score > this.target) {
             this.losses +=1;
+            isNewGame = true;
             this.readyNewGame();
         }
         
         this.updateDomScoreboard();
+        callback(<ScoreboardClickObj>{
+            score: this.score,
+            target: this.target,
+            wins: this.wins,
+            losses: this.losses,
+            isNewGame
+        });
     };
 
     private getRandomTarget(): number {
