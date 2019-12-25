@@ -11,11 +11,14 @@ interface EngramInterface {
     value: number;
 };
 
-interface ScoreboardClickObj {
+interface ScoreboardState {
     score: number;
     target: number;
     wins: number;
     losses: number;
+};
+
+interface ScoreboardClickObj extends ScoreboardState {
     isNewGame: boolean;
 };
 
@@ -50,9 +53,11 @@ class Engram extends TemplateComponent<HTMLDivElement, HTMLImageElement> {
 
 class EngramList extends TemplateComponent<HTMLDivElement, HTMLDivElement> {
     engrams: Engram[] = [];
+    scoreboardTarget: number;
 
     constructor(private images: string[]) {
         super('engrams-container-template', 'engrams-container', 'parent');
+        this.scoreboardTarget = scoreboard.target;
         this.configure();
         this.render();
     };
@@ -73,17 +78,25 @@ class EngramList extends TemplateComponent<HTMLDivElement, HTMLDivElement> {
     };
 
     handleClickLogic = (clickValue: number) => {
+        scoreboard.scoreClickHandler(clickValue);
+    };
+
+    subscribeToState() {
         let _this = this;
-        scoreboard.scoreClickHandler(clickValue, (scoreboardObj: ScoreboardClickObj) => {
-            if (scoreboardObj.isNewGame) {
+        scoreboard.addListener((state: ScoreboardState) => {
+            if (state.score > _this.scoreboardTarget) {
                 _this.randomizeEngramValues(12);
                 _this.update();
+            }
+            else if (state.score === 0) {
+                _this.scoreboardTarget = state.target;
             }
         });
     };
 
     configure() {
         let _this = this;
+        _this.subscribeToState();
         _this.engrams = _this.images.map((img) => new Engram(img, 0, _this.handleClickLogic));
         _this.randomizeEngramValues(12);
     };
@@ -150,6 +163,7 @@ class Scoreboard extends TemplateComponent<HTMLDivElement, HTMLDivElement> {
     private targetChild = new ScoreboardElement('scoreboard-template', 'Target');
     private scoreChild = new ScoreboardElement('scoreboard-template', 'Score');
     private progressChild = new ScoreboardProgress('progress-template', 'Progress');
+    private listeners: Function[] = [];
     score = 0;
     wins = 0;
     losses = 0;
@@ -181,32 +195,46 @@ class Scoreboard extends TemplateComponent<HTMLDivElement, HTMLDivElement> {
         this.render();
     };
 
-    scoreClickHandler(engramValue: number, callback?: Function) {
+    scoreClickHandler(engramValue: number) {
         let _this = this;
-        _this.score += +engramValue;
-        let isNewGame = false;
+        _this.score += engramValue;
+        let win = 0;
+        let loss = 0;
 
         if (_this.score === _this.target) {
-            _this.wins += 1;
-            isNewGame = true;
-            _this.readyNewGame();
+            win += 1;
         }
         else if (_this.score > _this.target) {
-            _this.losses += 1;
-            isNewGame = true;
-            _this.readyNewGame();
+            loss += 1;
         }
 
+        _this.triggerListeners();
+
+        if (win || loss) {
+            _this.score = 0;
+            _this.wins = _this.wins + win;
+            _this.losses = _this.losses + loss;
+            _this.target = _this.getRandomTarget();
+            _this.triggerListeners();
+        };
+
         _this.update();
-        if (callback) {
-            callback(<ScoreboardClickObj>{
+    };
+
+    addListener(listenerFn: Function) {
+        this.listeners.push(listenerFn);
+    };
+
+    triggerListeners() {
+        let _this = this;
+        for (const listenerFn of _this.listeners) {
+            listenerFn(<ScoreboardState>{
                 score: _this.score,
                 target: _this.target,
                 wins: _this.wins,
-                losses: _this.losses,
-                isNewGame
+                losses: _this.losses
             });
-        }
+        };
     };
 
     private getRandomTarget(): number {

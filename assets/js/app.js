@@ -21,6 +21,7 @@ var engramImages = [
 ];
 ;
 ;
+;
 var Engram = /** @class */ (function (_super) {
     __extends(Engram, _super);
     function Engram(image, _value, clickHandler) {
@@ -64,14 +65,9 @@ var EngramList = /** @class */ (function (_super) {
         _this_1.images = images;
         _this_1.engrams = [];
         _this_1.handleClickLogic = function (clickValue) {
-            var _this = _this_1;
-            scoreboard.scoreClickHandler(clickValue, function (scoreboardObj) {
-                if (scoreboardObj.isNewGame) {
-                    _this.randomizeEngramValues(12);
-                    _this.update();
-                }
-            });
+            scoreboard.scoreClickHandler(clickValue);
         };
+        _this_1.scoreboardTarget = scoreboard.target;
         _this_1.configure();
         _this_1.render();
         return _this_1;
@@ -91,8 +87,22 @@ var EngramList = /** @class */ (function (_super) {
         });
     };
     ;
+    EngramList.prototype.subscribeToState = function () {
+        var _this = this;
+        scoreboard.addListener(function (state) {
+            if (state.score > _this.scoreboardTarget) {
+                _this.randomizeEngramValues(12);
+                _this.update();
+            }
+            else if (state.score === 0) {
+                _this.scoreboardTarget = state.target;
+            }
+        });
+    };
+    ;
     EngramList.prototype.configure = function () {
         var _this = this;
+        _this.subscribeToState();
         _this.engrams = _this.images.map(function (img) { return new Engram(img, 0, _this.handleClickLogic); });
         _this.randomizeEngramValues(12);
     };
@@ -167,6 +177,7 @@ var Scoreboard = /** @class */ (function (_super) {
         _this_1.targetChild = new ScoreboardElement('scoreboard-template', 'Target');
         _this_1.scoreChild = new ScoreboardElement('scoreboard-template', 'Score');
         _this_1.progressChild = new ScoreboardProgress('progress-template', 'Progress');
+        _this_1.listeners = [];
         _this_1.score = 0;
         _this_1.wins = 0;
         _this_1.losses = 0;
@@ -196,30 +207,45 @@ var Scoreboard = /** @class */ (function (_super) {
         this.render();
     };
     ;
-    Scoreboard.prototype.scoreClickHandler = function (engramValue, callback) {
+    Scoreboard.prototype.scoreClickHandler = function (engramValue) {
         var _this = this;
-        _this.score += +engramValue;
-        var isNewGame = false;
+        _this.score += engramValue;
+        var win = 0;
+        var loss = 0;
         if (_this.score === _this.target) {
-            _this.wins += 1;
-            isNewGame = true;
-            _this.readyNewGame();
+            win += 1;
         }
         else if (_this.score > _this.target) {
-            _this.losses += 1;
-            isNewGame = true;
-            _this.readyNewGame();
+            loss += 1;
         }
+        _this.triggerListeners();
+        if (win || loss) {
+            _this.score = 0;
+            _this.wins = _this.wins + win;
+            _this.losses = _this.losses + loss;
+            _this.target = _this.getRandomTarget();
+            _this.triggerListeners();
+        }
+        ;
         _this.update();
-        if (callback) {
-            callback({
+    };
+    ;
+    Scoreboard.prototype.addListener = function (listenerFn) {
+        this.listeners.push(listenerFn);
+    };
+    ;
+    Scoreboard.prototype.triggerListeners = function () {
+        var _this = this;
+        for (var _i = 0, _a = _this.listeners; _i < _a.length; _i++) {
+            var listenerFn = _a[_i];
+            listenerFn({
                 score: _this.score,
                 target: _this.target,
                 wins: _this.wins,
-                losses: _this.losses,
-                isNewGame: isNewGame
+                losses: _this.losses
             });
         }
+        ;
     };
     ;
     Scoreboard.prototype.getRandomTarget = function () {
