@@ -46,7 +46,7 @@ class EngramList extends TemplateComponent<HTMLDivElement, HTMLDivElement> {
 
     constructor(private images: string[]) {
         super('engrams-container-template', 'engrams-container', 'parent');
-        this.scoreboardTarget = scoreboard.target;
+        this.scoreboardTarget = gameState.getState().target;
         this.configure();
         this.render();
     };
@@ -67,12 +67,12 @@ class EngramList extends TemplateComponent<HTMLDivElement, HTMLDivElement> {
     };
 
     handleClickLogic = (clickValue: number) => {
-        scoreboard.scoreClickHandler(clickValue);
+        gameState.scoreClickHandler(clickValue);
     };
 
     subscribeToState() {
         let _this = this;
-        scoreboard.addListener((state: ScoreboardState) => {
+        gameState.addListener((state: GameState) => {
             if (state.score > _this.scoreboardTarget) {
                 _this.randomizeEngramValues(12);
                 _this.update();

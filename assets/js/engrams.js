@@ -63,9 +63,9 @@ var EngramList = /** @class */ (function (_super) {
         _this_1.images = images;
         _this_1.engrams = [];
         _this_1.handleClickLogic = function (clickValue) {
-            scoreboard.scoreClickHandler(clickValue);
+            gameState.scoreClickHandler(clickValue);
         };
-        _this_1.scoreboardTarget = scoreboard.target;
+        _this_1.scoreboardTarget = gameState.getState().target;
         _this_1.configure();
         _this_1.render();
         return _this_1;
@@ -87,7 +87,7 @@ var EngramList = /** @class */ (function (_super) {
     ;
     EngramList.prototype.subscribeToState = function () {
         var _this = this;
-        scoreboard.addListener(function (state) {
+        gameState.addListener(function (state) {
             if (state.score > _this.scoreboardTarget) {
                 _this.randomizeEngramValues(12);
                 _this.update();

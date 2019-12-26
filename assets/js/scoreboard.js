@@ -12,8 +12,6 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-;
-;
 var ScoreboardElement = /** @class */ (function (_super) {
     __extends(ScoreboardElement, _super);
     function ScoreboardElement(templateId, scoreboardTitle) {
@@ -69,81 +67,24 @@ var Scoreboard = /** @class */ (function (_super) {
         _this_1.targetChild = new ScoreboardElement('scoreboard-template', 'Target');
         _this_1.scoreChild = new ScoreboardElement('scoreboard-template', 'Score');
         _this_1.progressChild = new ScoreboardProgress('progress-template', 'Progress');
-        _this_1.listeners = [];
-        _this_1.score = 0;
-        _this_1.wins = 0;
-        _this_1.losses = 0;
-        _this_1.target = 0;
         var _this = _this_1;
-        _this.target = _this.getRandomTarget();
-        _this.configure();
+        _this.subscribeToState();
+        _this.render();
         return _this_1;
     }
     ;
-    Scoreboard.prototype.update = function () {
+    Scoreboard.prototype.update = function (state) {
         var _this = this;
-        _this.targetChild.changeValue(_this.target);
-        _this.scoreChild.changeValue(_this.score);
-        _this.progressChild.changeValues(_this.wins, _this.losses);
+        _this.targetChild.changeValue(state.target);
+        _this.scoreChild.changeValue(state.score);
+        _this.progressChild.changeValues(state.wins, state.losses);
     };
     ;
-    Scoreboard.prototype.readyNewGame = function () {
-        var _this = this;
-        _this.target = _this.getRandomTarget();
-        _this.score = 0;
-        _this.update();
-    };
-    ;
-    Scoreboard.prototype.configure = function () {
-        this.readyNewGame();
-        this.render();
-    };
-    ;
-    Scoreboard.prototype.scoreClickHandler = function (engramValue) {
-        var _this = this;
-        _this.score += engramValue;
-        var win = 0;
-        var loss = 0;
-        if (_this.score === _this.target) {
-            win += 1;
-        }
-        else if (_this.score > _this.target) {
-            loss += 1;
-        }
-        _this.triggerListeners();
-        if (win || loss) {
-            _this.score = 0;
-            _this.wins = _this.wins + win;
-            _this.losses = _this.losses + loss;
-            _this.target = _this.getRandomTarget();
-            _this.triggerListeners();
-        }
-        ;
-        _this.update();
-    };
-    ;
-    Scoreboard.prototype.addListener = function (listenerFn) {
-        this.listeners.push(listenerFn);
-    };
-    ;
-    Scoreboard.prototype.triggerListeners = function () {
-        var _this = this;
-        for (var _i = 0, _a = _this.listeners; _i < _a.length; _i++) {
-            var listenerFn = _a[_i];
-            listenerFn({
-                score: _this.score,
-                target: _this.target,
-                wins: _this.wins,
-                losses: _this.losses
-            });
-        }
-        ;
-    };
-    ;
-    Scoreboard.prototype.getRandomTarget = function () {
-        var max = 100;
-        var min = 20;
-        return Math.ceil(Math.random() * (max - min)) + min;
+    Scoreboard.prototype.subscribeToState = function () {
+        var _this_1 = this;
+        gameState.addListener(function (state) {
+            _this_1.update(state);
+        });
     };
     ;
     Scoreboard.prototype.render = function () {
