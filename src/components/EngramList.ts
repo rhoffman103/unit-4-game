@@ -1,6 +1,7 @@
 import TemplateComponent from '../baseClasses/TemplateComponent';
 import game, { GameState } from '../state/GameState';
 import Engram from './Engram';
+import { engramRenderAnimations } from '../constants/index';
 
 export default class EngramList extends TemplateComponent<HTMLDivElement, HTMLDivElement> {
     engrams: Engram[] = [];
@@ -28,10 +29,6 @@ export default class EngramList extends TemplateComponent<HTMLDivElement, HTMLDi
         });
     };
 
-    // handleClickLogic = (clickValue: number) => {
-    //     game.scoreClickHandler(clickValue);
-    // };
-
     subscribeToState() {
         let _this = this;
         game.addListener((state: GameState) => {
@@ -49,6 +46,25 @@ export default class EngramList extends TemplateComponent<HTMLDivElement, HTMLDi
         let _this = this;
         _this.subscribeToState();
         _this.engrams = _this.images.map((img) => new Engram(img));
+        
+        _this.engrams.forEach((engram, i) => {
+            engram.element.classList.add(
+                'animated',
+                engramRenderAnimations[i].animation,
+                engramRenderAnimations[i].delay
+            );
+        });
+
+        setTimeout(() => {
+            _this.engrams.forEach((engram, i) => {
+                engram.element.classList.remove(
+                    'animated',
+                    engramRenderAnimations[i].animation,
+                    engramRenderAnimations[i].delay
+                );
+            });
+        }, 1800);
+
         _this.randomizeEngramValues(12);
     };
 

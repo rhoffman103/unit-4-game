@@ -1,13 +1,6 @@
 import Scoreboard from './components/Scoreboard';
 import EngramList from './components/EngramList';
-
-const engramImages = [
-    'rare-engram.png',
-    'legendary-engram.png',
-    'prototype-engram.png',
-    'exotic-engram.png',
-    'uncommon-engram.png'
-];
+import { engramImages } from './constants/index';
 
 new Scoreboard();
 new EngramList(engramImages);
