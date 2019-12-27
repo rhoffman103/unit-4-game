@@ -1,52 +1,14 @@
-const engramImages = [
-    'rare-engram.png',
-    'legendary-engram.png',
-    'prototype-engram.png',
-    'exotic-engram.png',
-    'uncommon-engram.png'
-];
+import TemplateComponent from '../baseClasses/TemplateComponent';
+import game, { GameState } from '../state/GameState';
+import Engram from './Engram';
 
-interface EngramInterface {
-    imageName: string;
-    value: number;
-};
-
-class Engram extends TemplateComponent<HTMLDivElement, HTMLImageElement> {
-    get value() {
-        return this._value;
-    };
-
-    constructor(
-        private image: string,
-        private _value: number,
-        private clickHandler: Function
-    ) {
-        super('engram-template', 'engrams-list', 'child');
-        this.configureElement();
-    };
-
-    public setValue(val: number) {
-        this._value = val;
-    };
-
-    configureElement() {
-        let _this = this;
-        _this.element.src = `./assets/images/${_this.image}`;
-        _this.element.addEventListener('click', () => {
-            _this.clickHandler(+_this._value);
-        });
-    };
-
-    render() { };
-};
-
-class EngramList extends TemplateComponent<HTMLDivElement, HTMLDivElement> {
+export default class EngramList extends TemplateComponent<HTMLDivElement, HTMLDivElement> {
     engrams: Engram[] = [];
     scoreboardTarget: number;
 
     constructor(private images: string[]) {
         super('engrams-container-template', 'engrams-container', 'parent');
-        this.scoreboardTarget = gameState.getState().target;
+        this.scoreboardTarget = game.getState().target;
         this.configure();
         this.render();
     };
@@ -66,13 +28,13 @@ class EngramList extends TemplateComponent<HTMLDivElement, HTMLDivElement> {
         });
     };
 
-    handleClickLogic = (clickValue: number) => {
-        gameState.scoreClickHandler(clickValue);
-    };
+    // handleClickLogic = (clickValue: number) => {
+    //     game.scoreClickHandler(clickValue);
+    // };
 
     subscribeToState() {
         let _this = this;
-        gameState.addListener((state: GameState) => {
+        game.addListener((state: GameState) => {
             if (state.score > _this.scoreboardTarget) {
                 _this.randomizeEngramValues(12);
                 _this.update();
@@ -86,7 +48,7 @@ class EngramList extends TemplateComponent<HTMLDivElement, HTMLDivElement> {
     configure() {
         let _this = this;
         _this.subscribeToState();
-        _this.engrams = _this.images.map((img) => new Engram(img, 0, _this.handleClickLogic));
+        _this.engrams = _this.images.map((img) => new Engram(img));
         _this.randomizeEngramValues(12);
     };
 

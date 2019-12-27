@@ -2,7 +2,7 @@ interface GetStateFn<T> {
     ():T
 };
 
-abstract class State <T extends object> {
+export default abstract class State <T extends object> {
     private listeners: Function[] = [];
     private _state: T = <T>{};
     private initialized = false;

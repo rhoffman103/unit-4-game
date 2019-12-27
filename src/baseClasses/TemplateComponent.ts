@@ -1,7 +1,7 @@
-type AttachPosition = 'afterbegin' | 'afterend' | 'beforebegin' | 'beforeend';
-type ComponentType = 'parent' | 'child';
+export type AttachPosition = 'afterbegin' | 'afterend' | 'beforebegin' | 'beforeend';
+export type ComponentType = 'parent' | 'child';
 
-abstract class TemplateComponent<T extends HTMLElement, U extends HTMLElement> {
+export default abstract class TemplateComponent<T extends HTMLElement, U extends HTMLElement> {
     templateElement: HTMLTemplateElement;
     hostElement: T;
     element: U;

@@ -3,7 +3,7 @@ const CleanPlugin = require('clean-webpack-plugin');
 
 module.exports = {
     mode: 'development',
-    entry: './src/test.ts',
+    entry: './src/app.ts',
     output: {
         filename: 'bundle.js',
         path: path.resolve(__dirname, 'dist')

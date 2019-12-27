@@ -1,4 +1,6 @@
-interface GameState {
+import State from '../baseClasses/State';
+
+export interface GameState {
     score: number;
     target: number;
     wins: number;
@@ -49,4 +51,5 @@ class Game extends State<GameState> {
     };
 };
 
-const gameState = new Game();
+const game = new Game();
+export default game;
