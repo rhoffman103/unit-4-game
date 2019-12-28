@@ -6,6 +6,13 @@ I am revisiting this game as I dive into typescript. The goal is to take an obje
 
 Deployed at: [https://rhoffman103.github.io/unit-4-game/](https://rhoffman103.github.io/unit-4-game/)
 
+Tech used:
+ * typescript
+ * webpack
+ * bootstrap
+ * animate css
+
 ### installation instructions
 1.  clone the repo
-2.  open index.html
+2.  run command ```npm install```
+3.  run command ```npm run start```
