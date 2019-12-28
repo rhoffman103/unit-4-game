@@ -10,14 +10,14 @@ export default abstract class TemplateComponent<T extends HTMLElement, U extends
         templateId: string,
         hostId: string,
         attachToHost?: ComponentType | undefined,
-        newElementId?: string,
+        newElementId?: string | 'none',
         position?: AttachPosition
     ) {
         this.templateElement = document.getElementById(templateId)! as HTMLTemplateElement;
         this.hostElement = document.getElementById(hostId)! as T;
         const importedNode = document.importNode(this.templateElement.content, true);
         this.element = importedNode.firstElementChild as U;
-        if (newElementId) {
+        if (newElementId && newElementId !== 'none') {
             this.element.id = newElementId;
         }
 

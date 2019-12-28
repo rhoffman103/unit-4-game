@@ -1,4 +1,5 @@
 import State from '../baseClasses/State';
+import Modal from '../components/Modal';
 
 export interface GameState {
     score: number;
@@ -41,6 +42,8 @@ class Game extends State<GameState> {
         this.updateState({ score: newScore });
 
         if (win || loss) {
+            if (win) new Modal(currentState.wins % 5 === 0 ? 'This is amazing! ': 'Your legend grows');
+            if (loss) new Modal('Your light fades away...')
             _this.updateState({
                 score: 0,
                 wins: currentState.wins + win,

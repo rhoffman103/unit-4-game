@@ -22,6 +22,19 @@
             <div class="mx-auto engram" id="engrams-list"></div>
         </template>
 
+        <template id="modal-template">
+            <div class="modal">
+                <div class="modal-content">
+                    <div class="modal-header bar-bg">
+                        <span class="close" id="close-modal">&times;</span>
+                    </div>
+                    <div class="modal-body text-center">
+                        <h2 class="modal-message"></h2>
+                    </div>
+                </div>
+            </div>
+        </template>
+
         <template id="scoreboard-template">
             <div class="col-md-4 col-6 mt-4">
                 <div class="card score-cards">
@@ -85,19 +98,8 @@
             </div>
             
         </div>
-        
-        <!-- MODAL -->
-        <div class="modal" id="modal">
-            <!-- MODAL CONTENT -->
-            <div class="modal-content">
-                <div class="modal-header bar-bg">
-                    <span class="close">&times;</span>
-                </div>
-                <div class="modal-body text-center">
-                    <h2 id="modal-message"></h2>
-                </div>
-            </div>
-        </div>
+
+        <div id="modal-container"></div>
         
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="dist/bundle.js"></script>
